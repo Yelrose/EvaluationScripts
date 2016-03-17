@@ -56,14 +56,15 @@ def read_test_set(path,representation):
                 if vocabs[y] == 0:
                     not_found += 1
                     vocabs[y] += 1
-            test.append(((x, y), sim))
+            if vocabs[x] + vocabs[y] == 0:
+                test.append(((x, y), sim))
     return test,len(vocabs),len(vocabs) - not_found
 
 
 def evaluate(representation, data,sim):
     results = []
-    for (x, y), sim in data:
-        results.append((sim(representation[x], representation[y]), sim))
+    for (x, y), _sim in data:
+        results.append((sim(representation[x], representation[y]), _sim))
     actual, expected = zip(*results)
     return spearmanr(actual, expected)[0]
 
